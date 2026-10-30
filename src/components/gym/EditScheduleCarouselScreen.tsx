@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation } from "convex/react";
-import { useEffect, useRef, useState } from "react";
+import { type CSSProperties, useEffect, useRef, useState } from "react";
 import { api } from "../../../convex/_generated/api";
 import type { Doc } from "../../../convex/_generated/dataModel";
 import { DAY_MAP, DAYS, type DayOfWeek, type UserProfile } from "./constants";
@@ -75,7 +75,10 @@ function WorkoutSlotBlock({
   };
 
   return (
-    <div className="flex flex-1 items-center border-2 border-[var(--metro-border)] bg-[var(--metro-surface)] px-3.5">
+    <div
+      style={{ "--metro-i": slot + 1 } as CSSProperties}
+      className="metro-item flex flex-1 items-center border-2 border-[var(--metro-border)] bg-[var(--metro-surface)] px-3.5"
+    >
       <input
         type="text"
         value={name}
@@ -147,9 +150,12 @@ export function EditScheduleCarouselScreen({
   const activeDayConfig = DAY_MAP[activeDay];
 
   return (
-    <div className="metro-screen-enter flex h-dvh w-full max-w-md mx-auto flex-col pt-3.5 select-none">
+    <div className="flex h-dvh w-full max-w-md mx-auto flex-col pt-3.5 select-none">
       {/* Top Header: Back button + 'edit [monday]' dynamic block */}
-      <header className="flex items-stretch gap-2.5 px-3.5 pb-3.5">
+      <header
+        style={{ "--metro-i": 0 } as CSSProperties}
+        className="metro-item flex items-stretch gap-2.5 px-3.5 pb-3.5"
+      >
         <button
           type="button"
           onClick={onBack}

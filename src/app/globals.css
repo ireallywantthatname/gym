@@ -41,34 +41,135 @@ textarea {
   user-select: text;
 }
 
-/* Metro tactile live-tile press physics */
+/* 3D Perspective Stage for Windows Phone Metro Turnstile */
+.metro-stage {
+  perspective: 1100px;
+  perspective-origin: 0% 50%;
+  overflow-x: hidden;
+}
+
+.metro-item {
+  transform-origin: -24px 50%;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  will-change: transform, opacity;
+}
+
+/* Forward navigation: tiles feather out around left 3D hinge, new screen feathers in */
+@keyframes metroTurnstileForwardOut {
+  0% {
+    opacity: 1;
+    transform: rotateY(0deg) translateZ(0);
+  }
+  100% {
+    opacity: 0;
+    transform: rotateY(72deg) translateZ(20px);
+  }
+}
+
+@keyframes metroTurnstileForwardIn {
+  0% {
+    opacity: 0;
+    transform: rotateY(-68deg) translateZ(-60px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: rotateY(0deg) translateZ(0) scale(1);
+  }
+}
+
+/* Backward navigation: current screen swings away, previous screen swings back in */
+@keyframes metroTurnstileBackOut {
+  0% {
+    opacity: 1;
+    transform: rotateY(0deg) translateZ(0);
+  }
+  100% {
+    opacity: 0;
+    transform: rotateY(-65deg) translateZ(-50px);
+  }
+}
+
+@keyframes metroTurnstileBackIn {
+  0% {
+    opacity: 0;
+    transform: rotateY(68deg) translateZ(30px) scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    transform: rotateY(0deg) translateZ(0) scale(1);
+  }
+}
+
+.metro-stage[data-transition="forward-out"] .metro-item {
+  animation: metroTurnstileForwardOut 145ms cubic-bezier(0.7, 0, 0.84, 0)
+    forwards;
+  animation-delay: calc(var(--metro-i, 0) * 16ms);
+}
+
+.metro-stage[data-transition="forward-in"] .metro-item {
+  animation: metroTurnstileForwardIn 310ms cubic-bezier(0.1, 0.9, 0.2, 1) both;
+  animation-delay: calc(var(--metro-i, 0) * 28ms);
+}
+
+.metro-stage[data-transition="back-out"] .metro-item {
+  animation: metroTurnstileBackOut 145ms cubic-bezier(0.7, 0, 0.84, 0) forwards;
+  animation-delay: calc(var(--metro-i, 0) * 16ms);
+}
+
+.metro-stage[data-transition="back-in"] .metro-item {
+  animation: metroTurnstileBackIn 310ms cubic-bezier(0.1, 0.9, 0.2, 1) both;
+  animation-delay: calc(var(--metro-i, 0) * 26ms);
+}
+
+/* Metro 3D live-tile press tilt physics */
 .metro-tile {
   transition:
-    transform 110ms cubic-bezier(0.2, 0.8, 0.2, 1),
-    filter 110ms ease,
+    transform 120ms cubic-bezier(0.1, 0.9, 0.2, 1),
+    filter 120ms ease,
     background-color 150ms ease;
   will-change: transform;
 }
 
 .metro-tile:active:not(:disabled) {
-  transform: scale(0.965);
+  transform: perspective(600px) scale(0.955) rotateX(2.5deg) rotateY(-2.5deg);
   filter: brightness(0.92);
 }
 
-/* Metro turnstile / slide screen entrance */
-@keyframes metroEnter {
-  from {
-    opacity: 0;
-    transform: translateX(14px);
+/* Metro 3D Live-Tile Flip for toggle tiles */
+@keyframes metroTileFlip {
+  0% {
+    transform: perspective(700px) rotateX(0deg);
   }
-  to {
-    opacity: 1;
-    transform: translateX(0);
+  50% {
+    transform: perspective(700px) rotateX(90deg) scale(0.95);
+  }
+  100% {
+    transform: perspective(700px) rotateX(0deg);
   }
 }
 
-.metro-screen-enter {
-  animation: metroEnter 160ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+.metro-tile-flip {
+  animation: metroTileFlip 320ms cubic-bezier(0.1, 0.9, 0.2, 1);
+}
+
+/* Smooth Metro Accordion Unfold */
+.metro-accordion-grid {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition:
+    grid-template-rows 220ms cubic-bezier(0.1, 0.9, 0.2, 1),
+    opacity 180ms ease;
+}
+
+.metro-accordion-grid[data-open="true"] {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+
+.metro-accordion-inner {
+  overflow: hidden;
 }
 
 /* Hide scrollbars while preserving smooth touch scrolling */

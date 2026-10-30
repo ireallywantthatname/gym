@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation } from "convex/react";
-import { useEffect, useRef, useState } from "react";
+import { type CSSProperties, useEffect, useRef, useState } from "react";
 import { api } from "../../../convex/_generated/api";
 import type { Doc, Id } from "../../../convex/_generated/dataModel";
 import { DAY_MAP, type DayOfWeek } from "./constants";
@@ -14,12 +14,14 @@ interface DayWorkoutScreenProps {
 
 interface WorkoutAccordionItemProps {
   workout: Doc<"workouts">;
+  index: number;
   isExpanded: boolean;
   onToggle: () => void;
 }
 
 function WorkoutAccordionItem({
   workout,
+  index,
   isExpanded,
   onToggle,
 }: WorkoutAccordionItemProps) {
@@ -65,7 +67,10 @@ function WorkoutAccordionItem({
   };
 
   return (
-    <div className="border-2 border-[var(--metro-border)] bg-[var(--metro-surface)]">
+    <div
+      style={{ "--metro-i": index + 1 } as CSSProperties}
+      className="metro-item border-2 border-[var(--metro-border)] bg-[var(--metro-surface)]"
+    >
       <button
         type="button"
         onClick={onToggle}
@@ -77,20 +82,22 @@ function WorkoutAccordionItem({
         </span>
       </button>
 
-      {isExpanded && (
-        <div className="px-3 pb-3 pt-0.5">
-          <div className="border-2 border-[var(--metro-border)] bg-[var(--metro-bg)] p-2.5">
-            <textarea
-              value={notes}
-              onChange={(e) => handleNotesChange(e.target.value)}
-              onBlur={handleBlur}
-              rows={3}
-              placeholder="eg: 10Kg each last time, make sure to keep the back straight."
-              className="w-full resize-none bg-transparent text-sm leading-relaxed text-[var(--metro-fg)] placeholder:text-[var(--metro-fg-muted)] focus:outline-none"
-            />
+      <div className="metro-accordion-grid" data-open={isExpanded}>
+        <div className="metro-accordion-inner">
+          <div className="px-3 pb-3 pt-0.5">
+            <div className="border-2 border-[var(--metro-border)] bg-[var(--metro-bg)] p-2.5">
+              <textarea
+                value={notes}
+                onChange={(e) => handleNotesChange(e.target.value)}
+                onBlur={handleBlur}
+                rows={3}
+                placeholder="eg: 10Kg each last time, make sure to keep the back straight."
+                className="w-full resize-none bg-transparent text-sm leading-relaxed text-[var(--metro-fg)] placeholder:text-[var(--metro-fg-muted)] focus:outline-none"
+              />
+            </div>
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }
@@ -114,9 +121,12 @@ export function DayWorkoutScreen({
   }, [dayWorkouts]);
 
   return (
-    <div className="metro-screen-enter flex h-dvh w-full max-w-md mx-auto flex-col p-3.5">
+    <div className="flex h-dvh w-full max-w-md mx-auto flex-col p-3.5">
       {/* Top Header: Back button + Day block */}
-      <header className="flex items-stretch gap-2.5 pb-3.5">
+      <header
+        style={{ "--metro-i": 0 } as CSSProperties}
+        className="metro-item flex items-stretch gap-2.5 pb-3.5"
+      >
         <button
           type="button"
           onClick={onBack}
@@ -137,10 +147,11 @@ export function DayWorkoutScreen({
 
       {/* Workout Accordion List */}
       <div className="no-scrollbar flex-1 space-y-2.5 overflow-y-auto">
-        {dayWorkouts.map((workout) => (
+        {dayWorkouts.map((workout, idx) => (
           <WorkoutAccordionItem
             key={workout._id}
             workout={workout}
+            index={idx}
             isExpanded={expandedId === workout._id}
             onToggle={() =>
               setExpandedId((prev) =>

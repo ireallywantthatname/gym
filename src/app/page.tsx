@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "convex/react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type {
   ScreenView,
   ThemeMode,
@@ -16,10 +16,19 @@ import { api } from "../../convex/_generated/api";
 const USER_STORAGE_KEY = "the-gymnasium:user";
 const THEME_STORAGE_KEY = "the-gymnasium:theme";
 
+type TurnstileTransition =
+  | "forward-in"
+  | "forward-out"
+  | "back-in"
+  | "back-out";
+
 export default function Home() {
   const [user, setUser] = useState<UserProfile>("akash");
   const [theme, setTheme] = useState<ThemeMode>("dark");
   const [screen, setScreen] = useState<ScreenView>({ type: "home" });
+  const [transition, setTransition] =
+    useState<TurnstileTransition>("forward-in");
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     const savedUser = window.localStorage.getItem(USER_STORAGE_KEY);
@@ -33,6 +42,20 @@ export default function Home() {
       document.documentElement.setAttribute("data-theme", savedTheme);
     }
   }, []);
+
+  const navigateWithTurnstile = (
+    nextScreen: ScreenView,
+    direction: "forward" | "back",
+  ) => {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
+    setTransition(direction === "forward" ? "forward-out" : "back-out");
+    timerRef.current = setTimeout(() => {
+      setScreen(nextScreen);
+      setTransition(direction === "forward" ? "forward-in" : "back-in");
+    }, 150);
+  };
 
   const handleToggleTheme = () => {
     const nextTheme: ThemeMode = theme === "dark" ? "light" : "dark";
@@ -50,11 +73,18 @@ export default function Home() {
   const workouts = useQuery(api.workouts.listByUser, { user });
 
   return (
-    <main className="min-h-dvh w-full bg-[var(--metro-bg)] text-[var(--metro-fg)]">
+    <main
+      data-transition={transition}
+      className="metro-stage min-h-dvh w-full bg-[var(--metro-bg)] text-[var(--metro-fg)]"
+    >
       {screen.type === "home" && (
         <HomeScreen
-          onSelectDay={(day) => setScreen({ type: "day", day })}
-          onOpenEditHub={() => setScreen({ type: "editHub" })}
+          onSelectDay={(day) =>
+            navigateWithTurnstile({ type: "day", day }, "forward")
+          }
+          onOpenEditHub={() =>
+            navigateWithTurnstile({ type: "editHub" }, "forward")
+          }
         />
       )}
 
@@ -62,16 +92,19 @@ export default function Home() {
         <DayWorkoutScreen
           day={screen.day}
           workouts={workouts}
-          onBack={() => setScreen({ type: "home" })}
+          onBack={() => navigateWithTurnstile({ type: "home" }, "back")}
         />
       )}
 
       {screen.type === "editHub" && (
         <EditHubScreen
           user={user}
-          onBack={() => setScreen({ type: "home" })}
+          onBack={() => navigateWithTurnstile({ type: "home" }, "back")}
           onOpenScheduleEditor={() =>
-            setScreen({ type: "editSchedule", initialDay: "monday" })
+            navigateWithTurnstile(
+              { type: "editSchedule", initialDay: "monday" },
+              "forward",
+            )
           }
           onToggleTheme={handleToggleTheme}
           onSwitchUser={handleSwitchUser}
@@ -83,7 +116,7 @@ export default function Home() {
           user={user}
           initialDay={screen.initialDay}
           workouts={workouts}
-          onBack={() => setScreen({ type: "editHub" })}
+          onBack={() => navigateWithTurnstile({ type: "editHub" }, "back")}
         />
       )}
     </main>
