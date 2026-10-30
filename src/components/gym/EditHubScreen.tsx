@@ -1,7 +1,7 @@
 "use client";
 
 import { type CSSProperties, useState } from "react";
-import type { UserProfile } from "./constants";
+import { EDIT_TILE_COLORS, type UserProfile } from "./constants";
 
 interface EditHubScreenProps {
   user: UserProfile;
@@ -35,7 +35,10 @@ export function EditHubScreen({
   };
 
   return (
-    <div className="flex h-dvh w-full max-w-md mx-auto flex-col p-3.5 select-none">
+    <section
+      aria-label="edit settings"
+      className="flex h-dvh w-full max-w-md mx-auto flex-col px-3.5 pt-3.5 pb-4 select-none"
+    >
       {/* Top Header: Back button + 'edit' block */}
       <header
         style={{ "--metro-i": 0 } as CSSProperties}
@@ -45,32 +48,44 @@ export function EditHubScreen({
           type="button"
           onClick={onBack}
           aria-label="Back to home"
-          className="metro-tile flex h-13 w-13 shrink-0 items-center justify-center border-2 border-[var(--metro-border)] bg-[var(--metro-surface)] text-2xl font-light text-[var(--metro-fg)]"
+          className="metro-tile flex h-13 w-13 shrink-0 items-center justify-center border-2 border-[var(--metro-border)] bg-[var(--metro-surface)] text-[var(--metro-fg)] hover:bg-[var(--metro-surface-elevated)]"
         >
-          ←
+          <svg
+            aria-hidden="true"
+            viewBox="0 0 24 24"
+            fill="none"
+            className="h-5 w-5 -translate-x-[1px]"
+          >
+            <path
+              d="M19 12H5M11 6L5 12L11 18"
+              stroke="currentColor"
+              strokeWidth="2.25"
+              strokeLinecap="square"
+            />
+          </svg>
         </button>
-        <div className="flex flex-1 items-center justify-center border-2 border-[var(--metro-border)] bg-[var(--metro-surface)] px-4 text-center">
-          <h1 className="text-2xl font-normal tracking-wide lowercase text-[var(--metro-fg)]">
+        <div className="metro-tile flex flex-1 items-center justify-center border-2 border-[var(--metro-border)] bg-[var(--metro-surface)] px-4 text-center">
+          <h1 className="text-2xl font-medium tracking-[-0.025em] lowercase text-[var(--metro-fg)] leading-none">
             edit
           </h1>
         </div>
       </header>
 
       {/* 2x2 Square Metro Tile Grid matching Screen 3 sketch */}
-      <div className="grid grid-cols-2 gap-3.5">
+      <nav aria-label="edit actions" className="grid grid-cols-2 gap-3.5">
         {/* Tile 1: add schedule */}
         <button
           type="button"
           onClick={onOpenScheduleEditor}
           style={
             {
-              backgroundColor: "#00ABA9",
+              backgroundColor: EDIT_TILE_COLORS.schedule,
               "--metro-i": 1,
             } as CSSProperties
           }
           className="metro-item metro-tile flex aspect-square items-center justify-center border-2 border-[var(--metro-border)] p-4 text-center text-white"
         >
-          <span className="text-2xl font-normal leading-snug lowercase">
+          <span className="text-[1.6rem] sm:text-[1.75rem] font-medium tracking-[-0.025em] leading-[1.1] lowercase text-balance">
             add
             <br />
             schedule
@@ -83,7 +98,7 @@ export function EditHubScreen({
           onClick={handleThemePress}
           style={
             {
-              backgroundColor: "#FA6800",
+              backgroundColor: EDIT_TILE_COLORS.theme,
               "--metro-i": 2,
             } as CSSProperties
           }
@@ -91,7 +106,7 @@ export function EditHubScreen({
             flipTheme ? "metro-tile-flip" : ""
           }`}
         >
-          <span className="text-2xl font-normal leading-snug lowercase">
+          <span className="text-[1.6rem] sm:text-[1.75rem] font-medium tracking-[-0.025em] leading-[1.1] lowercase text-balance">
             light/dark
             <br />
             mode
@@ -106,7 +121,7 @@ export function EditHubScreen({
           style={{ "--metro-i": 3 } as CSSProperties}
           className="metro-item flex aspect-square cursor-not-allowed items-center justify-center border-2 border-[var(--metro-border-subtle)] bg-[var(--metro-surface)] p-4 text-center opacity-45"
         >
-          <span className="text-2xl font-normal leading-snug lowercase text-[var(--metro-fg)]">
+          <span className="text-[1.6rem] sm:text-[1.75rem] font-medium tracking-[-0.025em] leading-[1.1] lowercase text-[var(--metro-fg)]">
             food
           </span>
         </button>
@@ -117,7 +132,10 @@ export function EditHubScreen({
           onClick={handleUserPress}
           style={
             {
-              backgroundColor: nextUser === "achini" ? "#D80073" : "#6A00FF",
+              backgroundColor:
+                nextUser === "achini"
+                  ? EDIT_TILE_COLORS.achini
+                  : EDIT_TILE_COLORS.akash,
               "--metro-i": 4,
             } as CSSProperties
           }
@@ -125,13 +143,13 @@ export function EditHubScreen({
             flipUser ? "metro-tile-flip" : ""
           }`}
         >
-          <span className="text-2xl font-normal leading-snug lowercase">
+          <span className="text-[1.6rem] sm:text-[1.75rem] font-medium tracking-[-0.025em] leading-[1.1] lowercase text-balance">
             login as
             <br />
             {nextUser}
           </span>
         </button>
-      </div>
-    </div>
+      </nav>
+    </section>
   );
 }

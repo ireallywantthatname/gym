@@ -77,7 +77,7 @@ function WorkoutSlotBlock({
   return (
     <div
       style={{ "--metro-i": slot + 1 } as CSSProperties}
-      className="metro-item flex flex-1 items-center border-2 border-[var(--metro-border)] bg-[var(--metro-surface)] px-3.5"
+      className="metro-item flex flex-1 items-center border-2 border-[var(--metro-border)] bg-[var(--metro-surface)] px-3.5 shadow-[inset_0_1px_0_0_var(--metro-edge-highlight)] transition-colors duration-150 hover:bg-[var(--metro-surface-elevated)] focus-within:bg-[var(--metro-surface-elevated)]"
     >
       <input
         type="text"
@@ -85,7 +85,7 @@ function WorkoutSlotBlock({
         onChange={(e) => handleChange(e.target.value)}
         onBlur={handleBlur}
         aria-label={`${day} workout ${slot + 1}`}
-        className="h-full w-full bg-transparent text-base sm:text-lg font-normal text-[var(--metro-fg)] focus:outline-none"
+        className="h-full w-full bg-transparent text-base sm:text-lg font-medium tracking-[-0.01em] text-[var(--metro-fg)] tabular-nums focus:outline-none"
       />
     </div>
   );
@@ -99,7 +99,10 @@ interface DayScheduleSlideProps {
 
 function DayScheduleSlide({ user, day, workouts }: DayScheduleSlideProps) {
   return (
-    <div className="flex h-full w-full shrink-0 snap-center flex-col gap-2.5 px-3.5 pb-3.5">
+    <article
+      aria-label={`${day} schedule`}
+      className="flex h-full w-full shrink-0 snap-center flex-col gap-2.5 px-3.5 pb-4"
+    >
       {WORKOUT_SLOTS.map((slot) => {
         const existing = workouts.find((w) => w.order === slot);
         return (
@@ -112,7 +115,7 @@ function DayScheduleSlide({ user, day, workouts }: DayScheduleSlideProps) {
           />
         );
       })}
-    </div>
+    </article>
   );
 }
 
@@ -150,7 +153,10 @@ export function EditScheduleCarouselScreen({
   const activeDayConfig = DAY_MAP[activeDay];
 
   return (
-    <div className="flex h-dvh w-full max-w-md mx-auto flex-col pt-3.5 select-none">
+    <section
+      aria-label="edit workout schedule"
+      className="flex h-dvh w-full max-w-md mx-auto flex-col pt-3.5 select-none"
+    >
       {/* Top Header: Back button + 'edit [monday]' dynamic block */}
       <header
         style={{ "--metro-i": 0 } as CSSProperties}
@@ -160,15 +166,27 @@ export function EditScheduleCarouselScreen({
           type="button"
           onClick={onBack}
           aria-label="Back"
-          className="metro-tile flex h-13 w-13 shrink-0 items-center justify-center border-2 border-[var(--metro-border)] bg-[var(--metro-surface)] text-2xl font-light text-[var(--metro-fg)]"
+          className="metro-tile flex h-13 w-13 shrink-0 items-center justify-center border-2 border-[var(--metro-border)] bg-[var(--metro-surface)] text-[var(--metro-fg)] hover:bg-[var(--metro-surface-elevated)]"
         >
-          ←
+          <svg
+            aria-hidden="true"
+            viewBox="0 0 24 24"
+            fill="none"
+            className="h-5 w-5 -translate-x-[1px]"
+          >
+            <path
+              d="M19 12H5M11 6L5 12L11 18"
+              stroke="currentColor"
+              strokeWidth="2.25"
+              strokeLinecap="square"
+            />
+          </svg>
         </button>
         <div
           style={{ backgroundColor: activeDayConfig.metroColor }}
-          className="flex flex-1 items-center justify-center border-2 border-[var(--metro-border)] px-3 text-center transition-colors duration-200"
+          className="metro-tile flex flex-1 items-center justify-center border-2 border-[var(--metro-border)] px-3 text-center transition-colors duration-200"
         >
-          <h1 className="text-xl sm:text-2xl font-normal tracking-wide lowercase text-white">
+          <h1 className="text-xl sm:text-2xl font-medium tracking-[-0.025em] lowercase text-white leading-none">
             edit [{activeDayConfig.label}]
           </h1>
         </div>
@@ -194,6 +212,6 @@ export function EditScheduleCarouselScreen({
           );
         })}
       </div>
-    </div>
+    </section>
   );
 }
