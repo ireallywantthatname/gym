@@ -1,1 +1,82 @@
 @import "tailwindcss";
+
+:root,
+[data-theme="dark"] {
+  --metro-bg: #000000;
+  --metro-surface: #121212;
+  --metro-surface-elevated: #1d1d1d;
+  --metro-fg: #ffffff;
+  --metro-fg-muted: #a3a3a3;
+  --metro-border: #ffffff;
+  --metro-border-subtle: #333333;
+}
+
+[data-theme="light"] {
+  --metro-bg: #f6f6f6;
+  --metro-surface: #ffffff;
+  --metro-surface-elevated: #ececec;
+  --metro-fg: #0a0a0a;
+  --metro-fg-muted: #525252;
+  --metro-border: #0a0a0a;
+  --metro-border-subtle: #d4d4d4;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  background-color: var(--metro-bg);
+  color: var(--metro-fg);
+  overscroll-behavior-y: none;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+input,
+textarea {
+  user-select: text;
+}
+
+/* Metro tactile live-tile press physics */
+.metro-tile {
+  transition:
+    transform 110ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    filter 110ms ease,
+    background-color 150ms ease;
+  will-change: transform;
+}
+
+.metro-tile:active:not(:disabled) {
+  transform: scale(0.965);
+  filter: brightness(0.92);
+}
+
+/* Metro turnstile / slide screen entrance */
+@keyframes metroEnter {
+  from {
+    opacity: 0;
+    transform: translateX(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.metro-screen-enter {
+  animation: metroEnter 160ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Hide scrollbars while preserving smooth touch scrolling */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
