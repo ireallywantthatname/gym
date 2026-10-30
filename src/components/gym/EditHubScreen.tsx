@@ -1,10 +1,9 @@
 "use client";
 
-import type { ThemeMode, UserProfile } from "./constants";
+import type { UserProfile } from "./constants";
 
 interface EditHubScreenProps {
   user: UserProfile;
-  theme: ThemeMode;
   onBack: () => void;
   onOpenScheduleEditor: () => void;
   onToggleTheme: () => void;
@@ -13,7 +12,6 @@ interface EditHubScreenProps {
 
 export function EditHubScreen({
   user,
-  theme,
   onBack,
   onOpenScheduleEditor,
   onToggleTheme,
@@ -47,15 +45,12 @@ export function EditHubScreen({
           type="button"
           onClick={onOpenScheduleEditor}
           style={{ backgroundColor: "#00ABA9" }}
-          className="metro-tile relative flex aspect-square flex-col items-center justify-center border-2 border-[var(--metro-border)] p-4 text-center text-white"
+          className="metro-tile flex aspect-square items-center justify-center border-2 border-[var(--metro-border)] p-4 text-center text-white"
         >
           <span className="text-2xl font-normal leading-snug lowercase">
             add
             <br />
             schedule
-          </span>
-          <span className="absolute bottom-2.5 left-3 text-[11px] font-light tracking-wide text-white/80 lowercase">
-            update days
           </span>
         </button>
 
@@ -64,15 +59,12 @@ export function EditHubScreen({
           type="button"
           onClick={onToggleTheme}
           style={{ backgroundColor: "#FA6800" }}
-          className="metro-tile relative flex aspect-square flex-col items-center justify-center border-2 border-[var(--metro-border)] p-4 text-center text-white"
+          className="metro-tile flex aspect-square items-center justify-center border-2 border-[var(--metro-border)] p-4 text-center text-white"
         >
           <span className="text-2xl font-normal leading-snug lowercase">
             light/dark
             <br />
             mode
-          </span>
-          <span className="absolute bottom-2.5 left-3 text-[11px] font-light tracking-wide text-white/85 lowercase">
-            current: {theme}
           </span>
         </button>
 
@@ -81,13 +73,10 @@ export function EditHubScreen({
           type="button"
           disabled
           aria-disabled="true"
-          className="relative flex aspect-square cursor-not-allowed flex-col items-center justify-center border-2 border-[var(--metro-border-subtle)] bg-[var(--metro-surface)] p-4 text-center opacity-45"
+          className="flex aspect-square cursor-not-allowed items-center justify-center border-2 border-[var(--metro-border-subtle)] bg-[var(--metro-surface)] p-4 text-center opacity-45"
         >
           <span className="text-2xl font-normal leading-snug lowercase text-[var(--metro-fg)]">
             food
-          </span>
-          <span className="absolute bottom-2.5 left-3 text-[11px] font-light tracking-wide text-[var(--metro-fg-muted)] lowercase">
-            coming soon
           </span>
         </button>
 
@@ -98,23 +87,14 @@ export function EditHubScreen({
           style={{
             backgroundColor: nextUser === "achini" ? "#D80073" : "#6A00FF",
           }}
-          className="metro-tile relative flex aspect-square flex-col items-center justify-center border-2 border-[var(--metro-border)] p-4 text-center text-white"
+          className="metro-tile flex aspect-square items-center justify-center border-2 border-[var(--metro-border)] p-4 text-center text-white"
         >
           <span className="text-2xl font-normal leading-snug lowercase">
             login as
             <br />
             {nextUser}
           </span>
-          <span className="absolute bottom-2.5 left-3 text-[11px] font-light tracking-wide text-white/85 lowercase">
-            now: {user}
-          </span>
         </button>
-      </div>
-
-      {/* Bottom Metro status info */}
-      <div className="mt-auto border-t border-[var(--metro-border-subtle)] pt-3 flex items-center justify-between text-xs lowercase text-[var(--metro-fg-muted)]">
-        <span>signed in as {user}</span>
-        <span>{theme} theme</span>
       </div>
     </div>
   );

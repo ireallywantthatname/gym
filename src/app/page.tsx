@@ -3,7 +3,6 @@
 import { useQuery } from "convex/react";
 import { useEffect, useState } from "react";
 import type {
-  DayOfWeek,
   ScreenView,
   ThemeMode,
   UserProfile,
@@ -21,11 +20,7 @@ export default function Home() {
   const [user, setUser] = useState<UserProfile>("akash");
   const [theme, setTheme] = useState<ThemeMode>("dark");
   const [screen, setScreen] = useState<ScreenView>({ type: "home" });
-  const [scheduleReturnScreen, setScheduleReturnScreen] = useState<ScreenView>({
-    type: "editHub",
-  });
 
-  // Hydrate persisted user & theme from localStorage on client mount
   useEffect(() => {
     const savedUser = window.localStorage.getItem(USER_STORAGE_KEY);
     if (savedUser === "akash" || savedUser === "achini") {
@@ -52,20 +47,12 @@ export default function Home() {
     window.localStorage.setItem(USER_STORAGE_KEY, nextUser);
   };
 
-  // Single reactive query for the active user's entire weekly schedule
   const workouts = useQuery(api.workouts.listByUser, { user });
-
-  const openScheduleEditor = (initialDay: DayOfWeek, returnTo: ScreenView) => {
-    setScheduleReturnScreen(returnTo);
-    setScreen({ type: "editSchedule", initialDay });
-  };
 
   return (
     <main className="min-h-dvh w-full bg-[var(--metro-bg)] text-[var(--metro-fg)]">
       {screen.type === "home" && (
         <HomeScreen
-          user={user}
-          workouts={workouts}
           onSelectDay={(day) => setScreen({ type: "day", day })}
           onOpenEditHub={() => setScreen({ type: "editHub" })}
         />
@@ -76,19 +63,15 @@ export default function Home() {
           day={screen.day}
           workouts={workouts}
           onBack={() => setScreen({ type: "home" })}
-          onEditDaySchedule={(day) =>
-            openScheduleEditor(day, { type: "day", day })
-          }
         />
       )}
 
       {screen.type === "editHub" && (
         <EditHubScreen
           user={user}
-          theme={theme}
           onBack={() => setScreen({ type: "home" })}
           onOpenScheduleEditor={() =>
-            openScheduleEditor("monday", { type: "editHub" })
+            setScreen({ type: "editSchedule", initialDay: "monday" })
           }
           onToggleTheme={handleToggleTheme}
           onSwitchUser={handleSwitchUser}
@@ -100,7 +83,7 @@ export default function Home() {
           user={user}
           initialDay={screen.initialDay}
           workouts={workouts}
-          onBack={() => setScreen(scheduleReturnScreen)}
+          onBack={() => setScreen({ type: "editHub" })}
         />
       )}
     </main>
