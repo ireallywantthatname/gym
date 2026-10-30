@@ -29,45 +29,52 @@ export const DAYS: readonly DayConfig[] = [
     id: "monday",
     label: "monday",
     shortLabel: "mon",
-    metroColor: "#00ABA9", // Metro Teal
-    metroSecondary: "#008280",
+    metroColor: "#128C8C", // Desaturated Metro Teal
+    metroSecondary: "#0D6B6B",
   },
   {
     id: "tuesday",
     label: "tuesday",
     shortLabel: "tue",
-    metroColor: "#D80073", // Metro Magenta
-    metroSecondary: "#A80059",
+    metroColor: "#B8256E", // Desaturated Metro Magenta
+    metroSecondary: "#8F1B54",
   },
   {
     id: "wednesday",
     label: "wednesday",
     shortLabel: "wed",
-    metroColor: "#008A00", // Metro Emerald
-    metroSecondary: "#006600",
+    metroColor: "#1E7E48", // Desaturated Metro Emerald
+    metroSecondary: "#155E35",
   },
   {
     id: "thursday",
     label: "thursday",
     shortLabel: "thu",
-    metroColor: "#FA6800", // Metro Orange
-    metroSecondary: "#C75200",
+    metroColor: "#D45D18", // Desaturated Metro Orange
+    metroSecondary: "#A64710",
   },
   {
     id: "friday",
     label: "friday",
     shortLabel: "fri",
-    metroColor: "#6A00FF", // Metro Violet
-    metroSecondary: "#5200C7",
+    metroColor: "#5E35B8", // Desaturated Metro Violet
+    metroSecondary: "#47268F",
   },
   {
     id: "saturday",
     label: "saturday",
     shortLabel: "sat",
-    metroColor: "#1BA1E2", // Metro Cyan
-    metroSecondary: "#1278AA",
+    metroColor: "#1E7FB8", // Desaturated Metro Cyan
+    metroSecondary: "#155F8A",
   },
 ] as const;
+
+export const EDIT_TILE_COLORS = {
+  schedule: "#128C8C",
+  theme: "#D45D18",
+  achini: "#B8256E",
+  akash: "#5E35B8",
+} as const;
 
 export const DAY_MAP: Record<DayOfWeek, DayConfig> = {
   monday: DAYS[0],
