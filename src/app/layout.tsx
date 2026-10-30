@@ -12,6 +12,16 @@ const outfit = Outfit({
 export const metadata: Metadata = {
   title: "the gymnasium",
   description: "Metro gym session tracker for Akash & Achini",
+  openGraph: {
+    title: "the gymnasium",
+    description: "Metro gym session tracker for Akash & Achini",
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: "the gymnasium",
+    description: "Metro gym session tracker for Akash & Achini",
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
@@ -24,7 +34,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
-  themeColor: "#000000",
+  themeColor: "#0a0a0c",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
