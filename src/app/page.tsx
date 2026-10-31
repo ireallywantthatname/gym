@@ -8,13 +8,14 @@ import type {
   UserProfile,
 } from "@/components/gym/constants";
 import { DayWorkoutScreen } from "@/components/gym/DayWorkoutScreen";
+import {
+  loadDevicePreferences,
+  saveDevicePreferences,
+} from "@/components/gym/db";
 import { EditHubScreen } from "@/components/gym/EditHubScreen";
 import { EditScheduleCarouselScreen } from "@/components/gym/EditScheduleCarouselScreen";
 import { HomeScreen } from "@/components/gym/HomeScreen";
 import { api } from "../../convex/_generated/api";
-
-const USER_STORAGE_KEY = "the-gymnasium:user";
-const THEME_STORAGE_KEY = "the-gymnasium:theme";
 
 type TurnstileTransition =
   | "forward-in"
@@ -31,16 +32,16 @@ export default function Home() {
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    const savedUser = window.localStorage.getItem(USER_STORAGE_KEY);
-    if (savedUser === "akash" || savedUser === "achini") {
-      setUser(savedUser);
-    }
-
-    const savedTheme = window.localStorage.getItem(THEME_STORAGE_KEY);
-    if (savedTheme === "dark" || savedTheme === "light") {
-      setTheme(savedTheme);
-      document.documentElement.setAttribute("data-theme", savedTheme);
-    }
+    let active = true;
+    void loadDevicePreferences().then((prefs) => {
+      if (!active) return;
+      setUser(prefs.user);
+      setTheme(prefs.theme);
+      document.documentElement.setAttribute("data-theme", prefs.theme);
+    });
+    return () => {
+      active = false;
+    };
   }, []);
 
   const navigateWithTurnstile = (
@@ -61,13 +62,13 @@ export default function Home() {
     const nextTheme: ThemeMode = theme === "dark" ? "light" : "dark";
     setTheme(nextTheme);
     document.documentElement.setAttribute("data-theme", nextTheme);
-    window.localStorage.setItem(THEME_STORAGE_KEY, nextTheme);
+    void saveDevicePreferences({ user, theme: nextTheme });
   };
 
   const handleSwitchUser = () => {
     const nextUser: UserProfile = user === "akash" ? "achini" : "akash";
     setUser(nextUser);
-    window.localStorage.setItem(USER_STORAGE_KEY, nextUser);
+    void saveDevicePreferences({ user: nextUser, theme });
   };
 
   const workouts = useQuery(api.workouts.listByUser, { user });
