@@ -183,7 +183,7 @@ export function EditScheduleCarouselScreen({
           </svg>
         </button>
         <div
-          style={{ backgroundColor: activeDayConfig.metroColor }}
+          style={{ backgroundColor: activeDayConfig.colors[user] }}
           className="metro-tile flex flex-1 items-center justify-center border-2 border-[var(--metro-border)] px-3 text-center transition-colors duration-200"
         >
           <h1 className="text-xl sm:text-2xl font-medium tracking-[-0.025em] lowercase text-white leading-none">

@@ -4,9 +4,10 @@ import { useMutation } from "convex/react";
 import { type CSSProperties, useEffect, useRef, useState } from "react";
 import { api } from "../../../convex/_generated/api";
 import type { Doc, Id } from "../../../convex/_generated/dataModel";
-import { DAY_MAP, type DayOfWeek } from "./constants";
+import { DAY_MAP, type DayOfWeek, type UserProfile } from "./constants";
 
 interface DayWorkoutScreenProps {
+  user: UserProfile;
   day: DayOfWeek;
   workouts: Doc<"workouts">[] | undefined;
   onBack: () => void;
@@ -118,6 +119,7 @@ function WorkoutAccordionItem({
 }
 
 export function DayWorkoutScreen({
+  user,
   day,
   workouts,
   onBack,
@@ -167,7 +169,7 @@ export function DayWorkoutScreen({
           </svg>
         </button>
         <div
-          style={{ backgroundColor: dayConfig.metroColor }}
+          style={{ backgroundColor: dayConfig.colors[user] }}
           className="metro-tile flex flex-1 items-center justify-center border-2 border-[var(--metro-border)] px-4 text-center"
         >
           <h1 className="text-2xl font-medium tracking-[-0.025em] lowercase text-white leading-none">

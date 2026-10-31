@@ -20,8 +20,7 @@ export interface DayConfig {
   id: DayOfWeek;
   label: string;
   shortLabel: string;
-  metroColor: string;
-  metroSecondary: string;
+  colors: Record<UserProfile, string>;
 }
 
 export const DAYS: readonly DayConfig[] = [
@@ -29,43 +28,55 @@ export const DAYS: readonly DayConfig[] = [
     id: "monday",
     label: "monday",
     shortLabel: "mon",
-    metroColor: "#128C8C", // Desaturated Metro Teal
-    metroSecondary: "#0D6B6B",
+    colors: {
+      akash: "#1B5E91", // Metro Cobalt
+      achini: "#B8256E", // Metro Magenta
+    },
   },
   {
     id: "tuesday",
     label: "tuesday",
     shortLabel: "tue",
-    metroColor: "#B8256E", // Desaturated Metro Magenta
-    metroSecondary: "#8F1B54",
+    colors: {
+      akash: "#128C8C", // Metro Teal
+      achini: "#C43E2F", // Metro Crimson
+    },
   },
   {
     id: "wednesday",
     label: "wednesday",
     shortLabel: "wed",
-    metroColor: "#1E7E48", // Desaturated Metro Emerald
-    metroSecondary: "#155E35",
+    colors: {
+      akash: "#1E7E48", // Metro Emerald
+      achini: "#D45D18", // Metro Burnt Orange
+    },
   },
   {
     id: "thursday",
     label: "thursday",
     shortLabel: "thu",
-    metroColor: "#D45D18", // Desaturated Metro Orange
-    metroSecondary: "#A64710",
+    colors: {
+      akash: "#3B4990", // Metro Indigo
+      achini: "#8E287A", // Metro Plum
+    },
   },
   {
     id: "friday",
     label: "friday",
     shortLabel: "fri",
-    metroColor: "#5E35B8", // Desaturated Metro Violet
-    metroSecondary: "#47268F",
+    colors: {
+      akash: "#4A607A", // Metro Steel Slate
+      achini: "#B5651D", // Metro Amber Ochre
+    },
   },
   {
     id: "saturday",
     label: "saturday",
     shortLabel: "sat",
-    metroColor: "#1E7FB8", // Desaturated Metro Cyan
-    metroSecondary: "#155F8A",
+    colors: {
+      akash: "#0E7C61", // Metro Sea Jade
+      achini: "#A82450", // Metro Berry Rose
+    },
   },
 ] as const;
 
@@ -73,7 +84,7 @@ export const EDIT_TILE_COLORS = {
   schedule: "#128C8C",
   theme: "#D45D18",
   achini: "#B8256E",
-  akash: "#5E35B8",
+  akash: "#1B5E91",
 } as const;
 
 export const DAY_MAP: Record<DayOfWeek, DayConfig> = {

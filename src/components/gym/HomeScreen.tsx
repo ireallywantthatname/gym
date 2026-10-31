@@ -1,14 +1,19 @@
 "use client";
 
 import type { CSSProperties } from "react";
-import { DAYS, type DayOfWeek } from "./constants";
+import { DAYS, type DayOfWeek, type UserProfile } from "./constants";
 
 interface HomeScreenProps {
+  user: UserProfile;
   onSelectDay: (day: DayOfWeek) => void;
   onOpenEditHub: () => void;
 }
 
-export function HomeScreen({ onSelectDay, onOpenEditHub }: HomeScreenProps) {
+export function HomeScreen({
+  user,
+  onSelectDay,
+  onOpenEditHub,
+}: HomeScreenProps) {
   return (
     <section
       aria-label="weekly workout schedule"
@@ -24,7 +29,7 @@ export function HomeScreen({ onSelectDay, onOpenEditHub }: HomeScreenProps) {
               onClick={() => onSelectDay(day.id)}
               style={
                 {
-                  backgroundColor: day.metroColor,
+                  backgroundColor: day.colors[user],
                   "--metro-i": idx,
                 } as CSSProperties
               }

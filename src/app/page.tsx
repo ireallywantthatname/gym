@@ -80,6 +80,7 @@ export default function Home() {
     >
       {screen.type === "home" && (
         <HomeScreen
+          user={user}
           onSelectDay={(day) =>
             navigateWithTurnstile({ type: "day", day }, "forward")
           }
@@ -91,6 +92,7 @@ export default function Home() {
 
       {screen.type === "day" && (
         <DayWorkoutScreen
+          user={user}
           day={screen.day}
           workouts={workouts}
           onBack={() => navigateWithTurnstile({ type: "home" }, "back")}
