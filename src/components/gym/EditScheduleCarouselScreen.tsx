@@ -77,7 +77,7 @@ function WorkoutSlotBlock({
   return (
     <div
       style={{ "--metro-i": slot + 1 } as CSSProperties}
-      className="metro-item flex flex-1 items-center border-2 border-[var(--metro-border)] bg-[var(--metro-surface)] px-3.5 shadow-[inset_0_1px_0_0_var(--metro-edge-highlight)] transition-colors duration-150 hover:bg-[var(--metro-surface-elevated)] focus-within:bg-[var(--metro-surface-elevated)]"
+      className="metro-item flex min-h-[3.25rem] flex-1 items-center border-2 border-[var(--metro-border)] bg-[var(--metro-surface)] px-3.5 shadow-[inset_0_1px_0_0_var(--metro-edge-highlight)] transition-colors duration-150 hover:bg-[var(--metro-surface-elevated)] focus-within:bg-[var(--metro-surface-elevated)]"
     >
       <input
         type="text"
@@ -101,7 +101,7 @@ function DayScheduleSlide({ user, day, workouts }: DayScheduleSlideProps) {
   return (
     <article
       aria-label={`${day} schedule`}
-      className="flex h-full w-full shrink-0 snap-center flex-col gap-2.5 px-3.5 pb-4"
+      className="no-scrollbar flex h-full w-full shrink-0 snap-center flex-col gap-2.5 overflow-y-auto px-3.5"
     >
       {WORKOUT_SLOTS.map((slot) => {
         const existing = workouts.find((w) => w.order === slot);
@@ -139,6 +139,20 @@ export function EditScheduleCarouselScreen({
     initializedScrollRef.current = true;
   }, [initialDay]);
 
+  const scrollToDayIndex = (index: number) => {
+    const container = carouselRef.current;
+    if (!container) return;
+    const clampedIndex = Math.max(0, Math.min(DAYS.length - 1, index));
+    const targetDay = DAYS[clampedIndex]?.id;
+    if (targetDay) {
+      setActiveDay(targetDay);
+    }
+    container.scrollTo({
+      left: clampedIndex * container.clientWidth,
+      behavior: "smooth",
+    });
+  };
+
   const handleScroll = () => {
     const container = carouselRef.current;
     if (!container || container.clientWidth === 0) return;
@@ -151,6 +165,7 @@ export function EditScheduleCarouselScreen({
   };
 
   const activeDayConfig = DAY_MAP[activeDay];
+  const activeDayIndex = DAYS.findIndex((d) => d.id === activeDay);
 
   return (
     <section
@@ -211,6 +226,78 @@ export function EditScheduleCarouselScreen({
             />
           );
         })}
+      </div>
+
+      {/* Bottom Metro Day Stepper */}
+      <div
+        style={{ "--metro-i": 8 } as CSSProperties}
+        className="metro-item flex items-center justify-between gap-2.5 px-3.5 pt-2.5 pb-4"
+      >
+        <button
+          type="button"
+          onClick={() => scrollToDayIndex(activeDayIndex - 1)}
+          disabled={activeDayIndex <= 0}
+          aria-label="Previous day"
+          className="metro-tile flex h-11 w-11 shrink-0 items-center justify-center border-2 border-[var(--metro-border)] bg-[var(--metro-surface)] text-[var(--metro-fg)] hover:bg-[var(--metro-surface-elevated)] disabled:cursor-not-allowed disabled:opacity-40"
+        >
+          <svg
+            aria-hidden="true"
+            viewBox="0 0 24 24"
+            fill="none"
+            className="h-4 w-4"
+          >
+            <path
+              d="M15 6L9 12L15 18"
+              stroke="currentColor"
+              strokeWidth="2.25"
+              strokeLinecap="square"
+            />
+          </svg>
+        </button>
+
+        <div className="flex flex-1 items-center justify-center gap-1.5">
+          {DAYS.map((dayConfig, idx) => {
+            const isActive = dayConfig.id === activeDay;
+            return (
+              <button
+                key={dayConfig.id}
+                type="button"
+                onClick={() => scrollToDayIndex(idx)}
+                aria-label={`Edit ${dayConfig.label}`}
+                style={
+                  isActive
+                    ? { backgroundColor: dayConfig.colors[user] }
+                    : undefined
+                }
+                className={`h-3 flex-1 max-w-8 border-2 border-[var(--metro-border)] transition-colors duration-150 ${
+                  isActive ? "" : "bg-[var(--metro-surface)]"
+                }`}
+              />
+            );
+          })}
+        </div>
+
+        <button
+          type="button"
+          onClick={() => scrollToDayIndex(activeDayIndex + 1)}
+          disabled={activeDayIndex >= DAYS.length - 1}
+          aria-label="Next day"
+          className="metro-tile flex h-11 w-11 shrink-0 items-center justify-center border-2 border-[var(--metro-border)] bg-[var(--metro-surface)] text-[var(--metro-fg)] hover:bg-[var(--metro-surface-elevated)] disabled:cursor-not-allowed disabled:opacity-40"
+        >
+          <svg
+            aria-hidden="true"
+            viewBox="0 0 24 24"
+            fill="none"
+            className="h-4 w-4"
+          >
+            <path
+              d="M9 6L15 12L9 18"
+              stroke="currentColor"
+              strokeWidth="2.25"
+              strokeLinecap="square"
+            />
+          </svg>
+        </button>
       </div>
     </section>
   );
