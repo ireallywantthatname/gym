@@ -1,7 +1,7 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "main": ".open-next/worker.js",
-  "name": "the-gymnasium",
+  "name": "gym",
   "compatibility_date": "2026-10-23",
   "compatibility_flags": ["global_fetch_strictly_public"],
   "assets": {
@@ -17,13 +17,13 @@
   "services": [
     {
       "binding": "WORKER_SELF_REFERENCE",
-      "service": "the-gymnasium"
+      "service": "gym"
     }
   ],
   "r2_buckets": [
     {
       "binding": "NEXT_INC_CACHE_R2_BUCKET",
-      "bucket_name": "the-gymnasium-opennext-cache"
+      "bucket_name": "gym-opennext-cache"
     }
   ],
   "images": {

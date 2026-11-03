@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "the-gymnasium",
+      "name": "gym",
       "dependencies": {
         "@opennextjs/cloudflare": "^1.20.14",
         "convex": "^1.48.0",

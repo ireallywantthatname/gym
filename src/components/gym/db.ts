@@ -8,21 +8,21 @@ export interface DevicePreferences {
 }
 
 const DEVICE_PREFS_ID = "device";
-const LEGACY_USER_KEY = "the-gymnasium:user";
-const LEGACY_THEME_KEY = "the-gymnasium:theme";
+const LEGACY_USER_KEY = "gym:user";
+const LEGACY_THEME_KEY = "gym:theme";
 
-class GymnasiumDatabase extends Dexie {
+class GymDatabase extends Dexie {
   preferences!: EntityTable<DevicePreferences, "id">;
 
   constructor() {
-    super("the-gymnasium-db");
+    super("gym-db");
     this.version(1).stores({
       preferences: "id",
     });
   }
 }
 
-export const db = new GymnasiumDatabase();
+export const db = new GymDatabase();
 
 export async function loadDevicePreferences(): Promise<DevicePreferences> {
   const existing = await db.preferences.get(DEVICE_PREFS_ID);

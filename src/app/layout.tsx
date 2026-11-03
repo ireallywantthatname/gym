@@ -10,22 +10,22 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "the gymnasium",
+  title: "gym",
   description: "Metro gym session tracker for Akash & Achini",
   openGraph: {
-    title: "the gymnasium",
+    title: "gym",
     description: "Metro gym session tracker for Akash & Achini",
     type: "website",
   },
   twitter: {
     card: "summary",
-    title: "the gymnasium",
+    title: "gym",
     description: "Metro gym session tracker for Akash & Achini",
   },
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "the gymnasium",
+    title: "gym",
   },
 };
 
