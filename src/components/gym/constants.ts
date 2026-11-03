@@ -13,7 +13,6 @@ export type ThemeMode = "dark" | "light";
 export type ScreenView =
   | { type: "home" }
   | { type: "day"; day: DayOfWeek }
-  | { type: "editHub" }
   | { type: "editSchedule"; initialDay: DayOfWeek };
 
 export interface DayConfig {
@@ -95,3 +94,17 @@ export const DAY_MAP: Record<DayOfWeek, DayConfig> = {
   friday: DAYS[4],
   saturday: DAYS[5],
 };
+
+const JS_DAY_TO_DAY_OF_WEEK: Record<number, DayOfWeek> = {
+  0: "monday",
+  1: "monday",
+  2: "tuesday",
+  3: "wednesday",
+  4: "thursday",
+  5: "friday",
+  6: "saturday",
+};
+
+export function getCurrentDayOfWeek(): DayOfWeek {
+  return JS_DAY_TO_DAY_OF_WEEK[new Date().getDay()] ?? "monday";
+}

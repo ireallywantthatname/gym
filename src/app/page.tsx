@@ -12,7 +12,6 @@ import {
   loadDevicePreferences,
   saveDevicePreferences,
 } from "@/components/gym/db";
-import { EditHubScreen } from "@/components/gym/EditHubScreen";
 import { EditScheduleCarouselScreen } from "@/components/gym/EditScheduleCarouselScreen";
 import { HomeScreen } from "@/components/gym/HomeScreen";
 import { api } from "../../convex/_generated/api";
@@ -85,9 +84,14 @@ export default function Home() {
           onSelectDay={(day) =>
             navigateWithTurnstile({ type: "day", day }, "forward")
           }
-          onOpenEditHub={() =>
-            navigateWithTurnstile({ type: "editHub" }, "forward")
+          onOpenScheduleEditor={() =>
+            navigateWithTurnstile(
+              { type: "editSchedule", initialDay: "monday" },
+              "forward",
+            )
           }
+          onToggleTheme={handleToggleTheme}
+          onSwitchUser={handleSwitchUser}
         />
       )}
 
@@ -100,27 +104,12 @@ export default function Home() {
         />
       )}
 
-      {screen.type === "editHub" && (
-        <EditHubScreen
-          user={user}
-          onBack={() => navigateWithTurnstile({ type: "home" }, "back")}
-          onOpenScheduleEditor={() =>
-            navigateWithTurnstile(
-              { type: "editSchedule", initialDay: "monday" },
-              "forward",
-            )
-          }
-          onToggleTheme={handleToggleTheme}
-          onSwitchUser={handleSwitchUser}
-        />
-      )}
-
       {screen.type === "editSchedule" && (
         <EditScheduleCarouselScreen
           user={user}
           initialDay={screen.initialDay}
           workouts={workouts}
-          onBack={() => navigateWithTurnstile({ type: "editHub" }, "back")}
+          onBack={() => navigateWithTurnstile({ type: "home" }, "back")}
         />
       )}
     </main>
