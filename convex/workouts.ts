@@ -87,3 +87,21 @@ export const updateNotes = mutation({
     return null;
   },
 });
+
+export const setCompleted = mutation({
+  args: {
+    id: v.id("workouts"),
+    completedDate: v.optional(v.string()),
+  },
+  returns: v.null(),
+  handler: async (ctx, args) => {
+    const existing = await ctx.db.get(args.id);
+    if (!existing) {
+      return null;
+    }
+    await ctx.db.patch("workouts", args.id, {
+      lastCompletedDate: args.completedDate,
+    });
+    return null;
+  },
+});

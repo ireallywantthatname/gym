@@ -19,6 +19,7 @@ export default defineSchema({
     name: v.string(),
     notes: v.string(),
     order: v.number(),
+    lastCompletedDate: v.optional(v.string()),
   })
     .index("by_user", ["user"])
     .index("by_user_and_day_and_order", ["user", "day", "order"]),
