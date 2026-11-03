@@ -10,6 +10,8 @@ export type DayOfWeek =
 
 export type ThemeMode = "dark" | "light";
 
+export type ScheduleViewMode = "list" | "carousel";
+
 export type ScreenView =
   | { type: "home" }
   | { type: "day"; day: DayOfWeek }
@@ -28,8 +30,8 @@ export const DAYS: readonly DayConfig[] = [
     label: "monday",
     shortLabel: "mon",
     colors: {
-      akash: "#1B5E91", // Metro Cobalt
-      achini: "#B8256E", // Metro Magenta
+      akash: "#1B5E91",
+      achini: "#B8256E",
     },
   },
   {
@@ -37,8 +39,8 @@ export const DAYS: readonly DayConfig[] = [
     label: "tuesday",
     shortLabel: "tue",
     colors: {
-      akash: "#128C8C", // Metro Teal
-      achini: "#C43E2F", // Metro Crimson
+      akash: "#128C8C",
+      achini: "#C43E2F",
     },
   },
   {
@@ -46,8 +48,8 @@ export const DAYS: readonly DayConfig[] = [
     label: "wednesday",
     shortLabel: "wed",
     colors: {
-      akash: "#1E7E48", // Metro Emerald
-      achini: "#D45D18", // Metro Burnt Orange
+      akash: "#1E7E48",
+      achini: "#D45D18",
     },
   },
   {
@@ -55,8 +57,8 @@ export const DAYS: readonly DayConfig[] = [
     label: "thursday",
     shortLabel: "thu",
     colors: {
-      akash: "#3B4990", // Metro Indigo
-      achini: "#8E287A", // Metro Plum
+      akash: "#3B4990",
+      achini: "#8E287A",
     },
   },
   {
@@ -64,8 +66,8 @@ export const DAYS: readonly DayConfig[] = [
     label: "friday",
     shortLabel: "fri",
     colors: {
-      akash: "#4A607A", // Metro Steel Slate
-      achini: "#B5651D", // Metro Amber Ochre
+      akash: "#4A607A",
+      achini: "#B5651D",
     },
   },
   {
@@ -73,8 +75,8 @@ export const DAYS: readonly DayConfig[] = [
     label: "saturday",
     shortLabel: "sat",
     colors: {
-      akash: "#0E7C61", // Metro Sea Jade
-      achini: "#A82450", // Metro Berry Rose
+      akash: "#0E7C61",
+      achini: "#A82450",
     },
   },
 ] as const;
@@ -107,4 +109,12 @@ const JS_DAY_TO_DAY_OF_WEEK: Record<number, DayOfWeek> = {
 
 export function getCurrentDayOfWeek(): DayOfWeek {
   return JS_DAY_TO_DAY_OF_WEEK[new Date().getDay()] ?? "monday";
+}
+
+export function getTodayDateKey(): string {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
 }
