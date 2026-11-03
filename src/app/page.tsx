@@ -2,11 +2,12 @@
 
 import { useQuery } from "convex/react";
 import { useEffect, useRef, useState } from "react";
-import type {
-  ScheduleViewMode,
-  ScreenView,
-  ThemeMode,
-  UserProfile,
+import {
+  getCurrentDayOfWeek,
+  type ScheduleViewMode,
+  type ScreenView,
+  type ThemeMode,
+  type UserProfile,
 } from "@/components/gym/constants";
 import { DayWorkoutScreen } from "@/components/gym/DayWorkoutScreen";
 import {
@@ -96,7 +97,11 @@ export default function Home() {
           }
           onOpenScheduleEditor={() =>
             navigateWithTurnstile(
-              { type: "editSchedule", initialDay: "monday" },
+              {
+                type: "editSchedule",
+                initialDay: getCurrentDayOfWeek(),
+                returnTo: { type: "home" },
+              },
               "forward",
             )
           }
@@ -112,6 +117,16 @@ export default function Home() {
           workouts={workouts}
           viewMode={viewMode}
           onToggleViewMode={handleToggleViewMode}
+          onEditDay={() =>
+            navigateWithTurnstile(
+              {
+                type: "editSchedule",
+                initialDay: screen.day,
+                returnTo: { type: "day", day: screen.day },
+              },
+              "forward",
+            )
+          }
           onBack={() => navigateWithTurnstile({ type: "home" }, "back")}
         />
       )}
@@ -121,7 +136,9 @@ export default function Home() {
           user={user}
           initialDay={screen.initialDay}
           workouts={workouts}
-          onBack={() => navigateWithTurnstile({ type: "home" }, "back")}
+          onBack={() =>
+            navigateWithTurnstile(screen.returnTo ?? { type: "home" }, "back")
+          }
         />
       )}
     </main>

@@ -18,6 +18,7 @@ interface DayWorkoutScreenProps {
   workouts: Doc<"workouts">[] | undefined;
   viewMode: ScheduleViewMode;
   onToggleViewMode: () => void;
+  onEditDay: () => void;
   onBack: () => void;
 }
 
@@ -298,6 +299,7 @@ export function DayWorkoutScreen({
   workouts,
   viewMode,
   onToggleViewMode,
+  onEditDay,
   onBack,
 }: DayWorkoutScreenProps) {
   const dayConfig = DAY_MAP[day];
@@ -419,56 +421,58 @@ export function DayWorkoutScreen({
           </h1>
         </div>
 
-        <button
-          type="button"
-          onClick={handleViewTogglePress}
-          aria-label={
-            viewMode === "list"
-              ? "Switch to carousel view"
-              : "Switch to list view"
-          }
-          className={`metro-tile flex h-13 w-13 shrink-0 items-center justify-center border-2 border-[var(--metro-border)] bg-[var(--metro-surface)] text-[var(--metro-fg)] hover:bg-[var(--metro-surface-elevated)] ${
-            flipViewToggle ? "metro-tile-flip" : ""
-          }`}
-        >
-          {viewMode === "list" ? (
-            <svg
-              aria-hidden="true"
-              viewBox="0 0 24 24"
-              fill="none"
-              className="h-5 w-5"
-            >
-              <rect
-                x="5"
-                y="4"
-                width="14"
-                height="16"
-                stroke="currentColor"
-                strokeWidth="2"
-              />
-              <path
-                d="M2 8V16M22 8V16"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="square"
-              />
-            </svg>
-          ) : (
-            <svg
-              aria-hidden="true"
-              viewBox="0 0 24 24"
-              fill="none"
-              className="h-5 w-5"
-            >
-              <path
-                d="M4 6H20M4 12H20M4 18H20"
-                stroke="currentColor"
-                strokeWidth="2.25"
-                strokeLinecap="square"
-              />
-            </svg>
-          )}
-        </button>
+        {dayWorkouts.length > 0 && (
+          <button
+            type="button"
+            onClick={handleViewTogglePress}
+            aria-label={
+              viewMode === "list"
+                ? "Switch to carousel view"
+                : "Switch to list view"
+            }
+            className={`metro-tile flex h-13 w-13 shrink-0 items-center justify-center border-2 border-[var(--metro-border)] bg-[var(--metro-surface)] text-[var(--metro-fg)] hover:bg-[var(--metro-surface-elevated)] ${
+              flipViewToggle ? "metro-tile-flip" : ""
+            }`}
+          >
+            {viewMode === "list" ? (
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="none"
+                className="h-5 w-5"
+              >
+                <rect
+                  x="5"
+                  y="4"
+                  width="14"
+                  height="16"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                />
+                <path
+                  d="M2 8V16M22 8V16"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="square"
+                />
+              </svg>
+            ) : (
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="none"
+                className="h-5 w-5"
+              >
+                <path
+                  d="M4 6H20M4 12H20M4 18H20"
+                  stroke="currentColor"
+                  strokeWidth="2.25"
+                  strokeLinecap="square"
+                />
+              </svg>
+            )}
+          </button>
+        )}
       </header>
 
       {isLoading ? (
@@ -481,6 +485,28 @@ export function DayWorkoutScreen({
             />
           ))}
         </div>
+      ) : dayWorkouts.length === 0 ? (
+        <button
+          type="button"
+          onClick={onEditDay}
+          aria-label={`Add workouts for ${dayConfig.label}`}
+          style={{ "--metro-i": 1 } as CSSProperties}
+          className="metro-item metro-tile flex flex-1 items-center justify-center border-2 border-[var(--metro-border)] bg-[var(--metro-surface)] text-[var(--metro-fg-muted)] hover:bg-[var(--metro-surface-elevated)] hover:text-[var(--metro-fg)]"
+        >
+          <svg
+            aria-hidden="true"
+            viewBox="0 0 24 24"
+            fill="none"
+            className="h-8 w-8"
+          >
+            <path
+              d="M12 5V19M5 12H19"
+              stroke="currentColor"
+              strokeWidth="2.25"
+              strokeLinecap="square"
+            />
+          </svg>
+        </button>
       ) : viewMode === "list" ? (
         <div className="no-scrollbar flex-1 space-y-2.5 overflow-y-auto">
           {dayWorkouts.map((workout, idx) => (

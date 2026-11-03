@@ -15,7 +15,11 @@ export type ScheduleViewMode = "list" | "carousel";
 export type ScreenView =
   | { type: "home" }
   | { type: "day"; day: DayOfWeek }
-  | { type: "editSchedule"; initialDay: DayOfWeek };
+  | {
+      type: "editSchedule";
+      initialDay: DayOfWeek;
+      returnTo?: { type: "home" } | { type: "day"; day: DayOfWeek };
+    };
 
 export interface DayConfig {
   id: DayOfWeek;
