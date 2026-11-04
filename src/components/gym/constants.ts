@@ -10,8 +10,6 @@ export type DayOfWeek =
 
 export type ThemeMode = "dark" | "light";
 
-export type ScheduleViewMode = "list" | "carousel";
-
 export type ScreenView =
   | { type: "home" }
   | { type: "day"; day: DayOfWeek }

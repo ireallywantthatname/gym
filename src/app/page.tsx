@@ -4,7 +4,6 @@ import { useQuery } from "convex/react";
 import { useEffect, useRef, useState } from "react";
 import {
   getCurrentDayOfWeek,
-  type ScheduleViewMode,
   type ScreenView,
   type ThemeMode,
   type UserProfile,
@@ -27,7 +26,6 @@ type TurnstileTransition =
 export default function Home() {
   const [user, setUser] = useState<UserProfile>("akash");
   const [theme, setTheme] = useState<ThemeMode>("dark");
-  const [viewMode, setViewMode] = useState<ScheduleViewMode>("list");
   const [screen, setScreen] = useState<ScreenView>({ type: "home" });
   const [transition, setTransition] =
     useState<TurnstileTransition>("forward-in");
@@ -39,7 +37,6 @@ export default function Home() {
       if (!active) return;
       setUser(prefs.user);
       setTheme(prefs.theme);
-      setViewMode(prefs.viewMode);
       document.documentElement.setAttribute("data-theme", prefs.theme);
     });
     return () => {
@@ -65,20 +62,13 @@ export default function Home() {
     const nextTheme: ThemeMode = theme === "dark" ? "light" : "dark";
     setTheme(nextTheme);
     document.documentElement.setAttribute("data-theme", nextTheme);
-    void saveDevicePreferences({ user, theme: nextTheme, viewMode });
+    void saveDevicePreferences({ user, theme: nextTheme });
   };
 
   const handleSwitchUser = () => {
     const nextUser: UserProfile = user === "akash" ? "achini" : "akash";
     setUser(nextUser);
-    void saveDevicePreferences({ user: nextUser, theme, viewMode });
-  };
-
-  const handleToggleViewMode = () => {
-    const nextViewMode: ScheduleViewMode =
-      viewMode === "list" ? "carousel" : "list";
-    setViewMode(nextViewMode);
-    void saveDevicePreferences({ user, theme, viewMode: nextViewMode });
+    void saveDevicePreferences({ user: nextUser, theme });
   };
 
   const workouts = useQuery(api.workouts.listByUser, { user });
@@ -115,8 +105,6 @@ export default function Home() {
           user={user}
           day={screen.day}
           workouts={workouts}
-          viewMode={viewMode}
-          onToggleViewMode={handleToggleViewMode}
           onEditDay={() =>
             navigateWithTurnstile(
               {

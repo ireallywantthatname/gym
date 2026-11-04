@@ -1,11 +1,10 @@
 import Dexie, { type EntityTable } from "dexie";
-import type { ScheduleViewMode, ThemeMode, UserProfile } from "./constants";
+import type { ThemeMode, UserProfile } from "./constants";
 
 export interface DevicePreferences {
   id: string;
   user: UserProfile;
   theme: ThemeMode;
-  viewMode: ScheduleViewMode;
 }
 
 const DEVICE_PREFS_ID = "device";
@@ -29,8 +28,9 @@ export async function loadDevicePreferences(): Promise<DevicePreferences> {
   const existing = await db.preferences.get(DEVICE_PREFS_ID);
   if (existing) {
     return {
-      ...existing,
-      viewMode: existing.viewMode === "carousel" ? "carousel" : "list",
+      id: existing.id,
+      user: existing.user,
+      theme: existing.theme,
     };
   }
 
@@ -54,7 +54,6 @@ export async function loadDevicePreferences(): Promise<DevicePreferences> {
     id: DEVICE_PREFS_ID,
     user: initialUser,
     theme: initialTheme,
-    viewMode: "list",
   };
 
   await db.preferences.put(initial);
@@ -62,12 +61,11 @@ export async function loadDevicePreferences(): Promise<DevicePreferences> {
 }
 
 export async function saveDevicePreferences(
-  prefs: Pick<DevicePreferences, "user" | "theme" | "viewMode">,
+  prefs: Pick<DevicePreferences, "user" | "theme">,
 ): Promise<void> {
   await db.preferences.put({
     id: DEVICE_PREFS_ID,
     user: prefs.user,
     theme: prefs.theme,
-    viewMode: prefs.viewMode,
   });
 }
